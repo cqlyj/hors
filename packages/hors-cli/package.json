@@ -1,0 +1,43 @@
+{
+  "name": "hors-cli",
+  "version": "0.0.0",
+  "description": "HORS command line (`hors`) and MCP bridge for gated services",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cqlyj/hors.git",
+    "directory": "packages/hors-cli"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "bin": {
+    "hors": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "skills"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.0.0",
+    "@modelcontextprotocol/server": "2.0.0",
+    "@worldcoin/agentkit-core": "0.2.1",
+    "commander": "15.0.0",
+    "hors-sdk": "workspace:*",
+    "viem": "2.56.3",
+    "zod": "4.5.4"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}
