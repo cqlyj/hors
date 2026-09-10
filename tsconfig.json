@@ -1,0 +1,7 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/hors-sdk/tsconfig.build.json" },
+    { "path": "packages/hors-cli/tsconfig.build.json" }
+  ]
+}

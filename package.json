@@ -1,0 +1,31 @@
+{
+  "name": "hors",
+  "version": "0.0.0",
+  "private": true,
+  "description": "HORS (Human-Origin Resource Sharing) workspace: hors-sdk and hors-cli",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cqlyj/hors.git"
+  },
+  "type": "module",
+  "packageManager": "pnpm@10.33.2",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "check": "pnpm lint && pnpm build && pnpm typecheck && pnpm test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.12",
+    "@types/node": "^22.20.1",
+    "typescript": "7.0.2",
+    "vitest": "5.0.0"
+  }
+}
