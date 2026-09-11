@@ -1,9 +1,8 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.0
 
-First release of both packages at the same version. The version field on disk stays
-`0.0.0` until publish.
+First release of both packages at the same version.
 
 - **hors-sdk** — gate (`createGate`, `definePolicy`, `defineConfig`), MCP and HTTP
   adapters, `createSigner`, resolvers (`resolve`, `classifyService`, ENS, ERC-8004),

@@ -1,6 +1,6 @@
 {
   "name": "hors-sdk",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "HORS (Human-Origin Resource Sharing): gate, adapters, signer and resolvers",
   "license": "MIT",
   "repository": {
