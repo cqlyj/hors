@@ -1,5 +1,8 @@
 # HORS — Human-Origin Resource Sharing
 
+[![hors-sdk](https://img.shields.io/npm/v/hors-sdk?label=hors-sdk)](https://www.npmjs.com/package/hors-sdk)
+[![hors-cli](https://img.shields.io/npm/v/hors-cli?label=hors-cli)](https://www.npmjs.com/package/hors-cli)
+
 CORS for AI agents. A browser asks *which origin is this request from?*; HORS asks *which
 human is behind the agent making this call?* — and answers with an anonymous, unforgeable
 World ID identity, so an MCP server or HTTP API can say "only my own human", "any verified
@@ -111,10 +114,40 @@ protects plain HTTP routes with `hors-sdk/http`.
 
 ## Try it without World App
 
+Same `hors()` as the quick start, served over HTTP. Save as `server.mjs` and add
+`@hono/node-server` (any fetch-standard server works):
+
+```js
+import { serve } from "@hono/node-server";
+import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
+import { hors } from "hors-sdk/mcp";
+import { z } from "zod";
+
+const handler = createMcpHandler(async () => {
+  const server = new McpServer({ name: "work", version: "1.0.0" });
+  const gated = await hors(server, { transport: "http" });
+  gated.registerTool(
+    "approve",
+    { inputSchema: z.object({ amount: z.number() }), hors: "same-human" },
+    async ({ amount }, ctx) => ({
+      content: [{ type: "text", text: `approved ${amount} for ${ctx.hors.callerHumanId}` }],
+    }),
+  );
+  return server;
+});
+
+serve({ fetch: handler.fetch, port: 8787, hostname: "127.0.0.1" });
+```
+
 ```sh
-HORS_MOCK=1 node server.mjs                                       # gate uses a deterministic mock registry
 npx -y hors-cli connect --profile work  --no-register --home /tmp/h
 npx -y hors-cli connect --profile other --no-register --home /tmp/h
+HORS_MOCK=1 HORS_HOME=/tmp/h HORS_PROFILE=work node server.mjs   # mock registry; leave this running
+```
+
+In another terminal:
+
+```sh
 npx -y hors-cli call http://127.0.0.1:8787/mcp approve '{"amount":1}' --profile work  --home /tmp/h   # passes
 npx -y hors-cli call http://127.0.0.1:8787/mcp approve '{"amount":1}' --profile other --home /tmp/h   # HORS_ORIGIN_MISMATCH
 ```
@@ -132,10 +165,10 @@ service side. A gate refuses mock mode under `NODE_ENV=production`.
 
 ## Packages
 
-| Package                            | What it is                                                      |
-| ---------------------------------- | --------------------------------------------------------------- |
-| [`hors-sdk`](packages/hors-sdk)    | Gate, MCP and HTTP adapters, policies, client signer, resolvers. |
-| [`hors-cli`](packages/hors-cli)    | `hors` binary: `init`, `connect`, `list`, `call`, `mcp`, …       |
+| Package                         | npm                                                                    | What it is                                                       |
+| ------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [`hors-sdk`](packages/hors-sdk) | [`hors-sdk`](https://www.npmjs.com/package/hors-sdk) `0.1.0`           | Gate, MCP and HTTP adapters, policies, client signer, resolvers. |
+| [`hors-cli`](packages/hors-cli) | [`hors-cli`](https://www.npmjs.com/package/hors-cli) `0.1.0`           | `hors` binary: `init`, `connect`, `list`, `call`, `mcp`, …        |
 
 Requirements: Node ≥ 22.18 (native TypeScript config loading), World App for registration.
 `hors-sdk` peers: `viem`, `@worldcoin/agentkit-core`, and `@modelcontextprotocol/server`
